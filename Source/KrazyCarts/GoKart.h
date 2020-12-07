@@ -27,6 +27,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+
+	void UpdateLocationFromVelocity(float DeltaTime);
+
 	void MoveForward(float Val);
 
 	FVector Velocity;
