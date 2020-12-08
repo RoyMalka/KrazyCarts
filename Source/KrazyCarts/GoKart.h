@@ -30,11 +30,16 @@ public:
 
 private:
 
+	
 	void UpdateLocationFromVelocity(float DeltaTime);
 
 	void MoveForward(float Val);
 
 	void MoveRight(float Val);
+
+	const FVector GetAirResistance();
+
+	const FVector GetRollingResistance();
 
 	FVector Velocity;
 
@@ -45,6 +50,15 @@ private:
 	//The force applied to the car when the throttle is fully down.
 	UPROPERTY(EditAnywhere)
 		float MaxDrivingForce = 9800.f;
+
+	UPROPERTY(EditAnywhere)
+		float DragCoefficient = 16.f;
+
+	UPROPERTY(EditAnywhere)
+		float RollingResistanceCoefficient = 0.015;
+
+	UPROPERTY(EditAnywhere)
+		float MaxDrivingSpeed = 10000.f;
 
 	//The number of degrees rotated per seconds at full controll throw (degree/s).
 	UPROPERTY(EditAnywhere)
