@@ -35,8 +35,6 @@ void AGoKart::Tick(float DeltaTime)
 
 	Velocity = Velocity + Acceleration * DeltaTime;
 
-
-
 	ApplyRotation(DeltaTime);
 
 	UpdateLocationFromVelocity(DeltaTime);
@@ -59,9 +57,9 @@ const FVector AGoKart::GetRollingResistance()
 
 void AGoKart::ApplyRotation(float DeltaTime)
 {
-	float RotationAngle = MaxDegressPerSeconds * DeltaTime * SteeringThrow;
+	float RotationAngle = (FVector::DotProduct(GetActorForwardVector(), Velocity) * DeltaTime) / MinimumTurningRadius * SteeringThrow; // MaxDegressPerSeconds * DeltaTime * SteeringThrow;
 
-	FQuat RotationDelta(GetActorUpVector(), FMath::DegreesToRadians(RotationAngle));
+	FQuat RotationDelta(GetActorUpVector(), RotationAngle);
 
 	AddActorWorldRotation(RotationDelta);
 

@@ -60,9 +60,8 @@ private:
 	UPROPERTY(EditAnywhere)
 		float MaxDrivingSpeed = 10000.f;
 
-	//The number of degrees rotated per seconds at full controll throw (degree/s).
 	UPROPERTY(EditAnywhere)
-		float MaxDegressPerSeconds = 90;
+		float MinimumTurningRadius = 10;
 
 	float Throttle;
 
