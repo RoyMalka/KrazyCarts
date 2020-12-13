@@ -29,9 +29,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-
 	
 	void UpdateLocationFromVelocity(float DeltaTime);
+
+	void MoveForward(float Val);
+	void MoveRight(float Val);
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_MoveForward(float Val);
