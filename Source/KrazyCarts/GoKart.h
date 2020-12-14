@@ -19,7 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -29,23 +29,29 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	
+
 	void UpdateLocationFromVelocity(float DeltaTime);
 
 	void MoveForward(float Val);
 	void MoveRight(float Val);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_MoveForward(float Val);
+		void Server_MoveForward(float Val);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_MoveRight(float Val);
+		void Server_MoveRight(float Val);
 
 	const FVector GetAirResistance();
 
 	const FVector GetRollingResistance();
 
 	FVector Velocity;
+
+	UPROPERTY(Replicated)
+		FVector Replicated_Location;
+
+	UPROPERTY(Replicated)
+		FRotator Replicated_Rotation;
 
 	//The mass of the car (kg).
 	UPROPERTY(EditAnywhere)
