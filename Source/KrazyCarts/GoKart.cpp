@@ -12,10 +12,6 @@ AGoKart::AGoKart()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
-	if (HasAuthority())
-	{
-		NetUpdateFrequency = 1.f;
-	}
 
 }
 
@@ -24,6 +20,11 @@ void AGoKart::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (HasAuthority())
+	{
+		NetUpdateFrequency = 1.f;
+	}
+
 }
 
 void AGoKart::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
@@ -31,22 +32,25 @@ void AGoKart::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetim
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AGoKart, Replicated_Transform);
+	DOREPLIFETIME(AGoKart, Velocity);
+	DOREPLIFETIME(AGoKart, Throttle);
+	DOREPLIFETIME(AGoKart, SteeringThrow);
 }
 
 FString GetEnumText(ENetRole Role)
 {
 	switch (Role)
 	{
-		case ROLE_None:
-			return "None";
-		case ROLE_SimulatedProxy:
-			return "SimulatedProxy";
-		case ROLE_AutonomousProxy:
-			return "AutonomousProxy";
-		case ROLE_Authority:
-			return "Authority";
-		default:
-			return "Error";
+	case ROLE_None:
+		return "None";
+	case ROLE_SimulatedProxy:
+		return "SimulatedProxy";
+	case ROLE_AutonomousProxy:
+		return "AutonomousProxy";
+	case ROLE_Authority:
+		return "Authority";
+	default:
+		return "Error";
 	}
 }
 
@@ -54,6 +58,11 @@ FString GetEnumText(ENetRole Role)
 void AGoKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (HasAuthority())
+	{
+		Replicated_Transform = GetActorTransform();
+	}
 
 	FVector AirResistance = GetAirResistance();
 	FVector RollingResistance = GetRollingResistance();
@@ -70,12 +79,7 @@ void AGoKart::Tick(float DeltaTime)
 
 	UpdateLocationFromVelocity(DeltaTime);
 
-	if (HasAuthority())
-	{		
-		Replicated_Transform = GetActorTransform();
-	}
-	
-	DrawDebugString(GetWorld(), FVector(0, 0 ,100), GetEnumText(GetLocalRole()), this, FColor::White, DeltaTime);
+	DrawDebugString(GetWorld(), FVector(0, 0, 100), GetEnumText(GetLocalRole()), this, FColor::White, DeltaTime);
 }
 
 const FVector AGoKart::GetAirResistance()
@@ -92,6 +96,7 @@ const FVector AGoKart::GetRollingResistance()
 
 	return -(Velocity.GetSafeNormal() * RollingResistanceCoefficient * NoramlForce);
 }
+
 
 void AGoKart::OnRep_ReplicatedTransform()
 {

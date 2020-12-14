@@ -45,14 +45,15 @@ private:
 
 	const FVector GetRollingResistance();
 
-	FVector Velocity;
+	UPROPERTY(Replicated)
+		FVector Velocity;
 
 	UPROPERTY(ReplicatedUsing = OnRep_ReplicatedTransform)
-	FTransform Replicated_Transform;
-			
+		FTransform Replicated_Transform;
+
 	UFUNCTION()
 		void OnRep_ReplicatedTransform();
-	
+
 
 	//The mass of the car (kg).
 	UPROPERTY(EditAnywhere)
@@ -74,8 +75,10 @@ private:
 	UPROPERTY(EditAnywhere)
 		float MinimumTurningRadius = 10;
 
-	float Throttle;
+	UPROPERTY(Replicated)
+		float Throttle;
 
-	float SteeringThrow;
+	UPROPERTY(Replicated)
+		float SteeringThrow;
 
 };
