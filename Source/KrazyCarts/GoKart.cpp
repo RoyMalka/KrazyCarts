@@ -12,6 +12,10 @@ AGoKart::AGoKart()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
+	if (HasAuthority())
+	{
+		NetUpdateFrequency = 1.f;
+	}
 
 }
 
@@ -26,8 +30,7 @@ void AGoKart::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetim
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AGoKart, Replicated_Location);
-	DOREPLIFETIME(AGoKart, Replicated_Rotation);
+	DOREPLIFETIME(AGoKart, Replicated_Transform);
 }
 
 FString GetEnumText(ENetRole Role)
@@ -68,14 +71,8 @@ void AGoKart::Tick(float DeltaTime)
 	UpdateLocationFromVelocity(DeltaTime);
 
 	if (HasAuthority())
-	{
-		Replicated_Location = GetActorLocation();
-		Replicated_Rotation = GetActorRotation();
-	}
-	else
-	{
-		SetActorLocation(Replicated_Location);
-		SetActorRotation(Replicated_Rotation);
+	{		
+		Replicated_Transform = GetActorTransform();
 	}
 	
 	DrawDebugString(GetWorld(), FVector(0, 0 ,100), GetEnumText(GetLocalRole()), this, FColor::White, DeltaTime);
@@ -94,6 +91,11 @@ const FVector AGoKart::GetRollingResistance()
 	float NoramlForce = Mass * AccelerationDueToGravity;
 
 	return -(Velocity.GetSafeNormal() * RollingResistanceCoefficient * NoramlForce);
+}
+
+void AGoKart::OnRep_ReplicatedTransform()
+{
+	SetActorTransform(Replicated_Transform);
 }
 
 void AGoKart::ApplyRotation(float DeltaTime)
