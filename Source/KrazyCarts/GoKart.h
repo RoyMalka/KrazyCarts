@@ -67,6 +67,9 @@ private:
 
 	void SimulateMove(FGoKartMove Move);
 
+	FGoKartMove CreateMove(float DeltaTime);
+	void ClearAcknowledgedMoves(FGoKartMove LastMove);
+
 	void UpdateLocationFromVelocity(float DeltaTime);
 
 	void MoveForward(float Val);
@@ -112,5 +115,7 @@ private:
 	float Throttle;
 
 	float SteeringThrow;
+
+	TArray<FGoKartMove> UnacknowledgedMoves;
 
 };
