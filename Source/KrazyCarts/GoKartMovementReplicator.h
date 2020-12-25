@@ -57,4 +57,6 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		UGoKartMovementComponent* MovementComponent;
 
+	void UpdateServerState(const FGoKartMove& Move);
+
 };

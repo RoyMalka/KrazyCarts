@@ -25,12 +25,12 @@ struct FGoKartMove
 };
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class KRAZYCARTS_API UGoKartMovementComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UGoKartMovementComponent();
 
@@ -38,11 +38,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	FGoKartMove CreateMove(float DeltaTime);
 
 	void SimulateMove(const FGoKartMove& Move);
 
@@ -54,7 +52,11 @@ public:
 
 	void SetSteeringThrow(float Val) { SteeringThrow = Val; }
 
+	FGoKartMove GetLastMove() { return LastMove; }
+
 private:
+
+	FGoKartMove CreateMove(float DeltaTime);
 
 	void UpdateLocationFromVelocity(float DeltaTime);
 
@@ -88,7 +90,8 @@ private:
 
 	float SteeringThrow;
 
-
 	FVector Velocity;
-		
+
+	FGoKartMove LastMove;
+
 };
