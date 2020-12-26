@@ -3,6 +3,7 @@
 
 #include "GoKartMovementReplicator.h"
 #include "Net/UnrealNetwork.h"
+#include "GameFramework/GameStateBase.h"
 
 // Sets default values for this component's properties
 UGoKartMovementReplicator::UGoKartMovementReplicator()
@@ -129,6 +130,7 @@ void UGoKartMovementReplicator::Server_SendMove_Implementation(FGoKartMove Move)
 {
 	if (!MovementComponent) { return; }
 
+	ClientSimulatedTime += Move.DeltaTime;
 	MovementComponent->SimulateMove(Move);
 
 	UpdateServerState(Move);
@@ -136,7 +138,10 @@ void UGoKartMovementReplicator::Server_SendMove_Implementation(FGoKartMove Move)
 
 bool UGoKartMovementReplicator::Server_SendMove_Validate(FGoKartMove Move)
 {
-	return  true;// FMath::Abs(Val) <= 1.f;
+	AGameStateBase* GameState = GetWorld()->GetGameState();
+	float PropesedTime = ClientSimulatedTime + Move.DeltaTime;
+	bool ClinetNotRunningAhead = PropesedTime < GameState->GetServerWorldTimeSeconds();
+	return Move.IsValid() && !ClinetNotRunningAhead;
 }
 
 void UGoKartMovementReplicator::UpdateServerState(const FGoKartMove& Move)
