@@ -13,7 +13,7 @@ struct FGoKartState
 	GENERATED_BODY()
 
 		UPROPERTY()
-		FGoKartMove LatMove;
+		FGoKartMove LastMove;
 
 	UPROPERTY()
 		FVector Velocity;
@@ -64,6 +64,7 @@ private:
 	float ClientTimeSinceUpdate;
 	float ClientTimeBetweenLastUpdates;
 	FTransform ClientStartTransform;
+	FVector ClientStartVelocity;
 
 	UPROPERTY(VisibleAnywhere)
 		UGoKartMovementComponent* MovementComponent;

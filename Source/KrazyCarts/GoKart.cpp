@@ -21,7 +21,7 @@ AGoKart::AGoKart()
 // Called when the game starts or when spawned
 void AGoKart::BeginPlay()
 {
-	Super::BeginPlay(); 
+	Super::BeginPlay();
 
 	if (HasAuthority())
 	{
@@ -52,7 +52,7 @@ void AGoKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
+
 	DrawDebugString(GetWorld(), FVector(0, 0, 100), GetEnumText(GetLocalRole()), this, FColor::White, DeltaTime);
 }
 
@@ -79,5 +79,5 @@ void AGoKart::MoveRight(float Val)
 {
 	if (!MovementComponent) { return; }
 
-	MovementComponent->SetSteeringThrow(Val); 
+	MovementComponent->SetSteeringThrow(Val);
 }
