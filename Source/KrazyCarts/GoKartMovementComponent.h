@@ -56,7 +56,7 @@ public:
 
 private:
 
-	FGoKartMove CreateMove(float DeltaTime);
+	FGoKartMove CreateMove(float DeltaTime); 
 
 	void UpdateLocationFromVelocity(float DeltaTime);
 
